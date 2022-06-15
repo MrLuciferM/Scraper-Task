@@ -2,12 +2,9 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.expected_conditions import presence_of_element_located
-import json
 from selenium.webdriver.common.proxy import Proxy, ProxyType
 import time
 import random
@@ -57,16 +54,8 @@ with chrome_driver as driver:
     load_more = driver.find_element_by_xpath('//*[@id="page-content"]/div[4]//div/button')
     props = ''
     i = 1
-    
-    # props_script_element = driver.find_element_by_css_selector('#__NEXT_DATA__')
-    # print(props_script_element)
-    # props = props_script_element.get_attribute('innerHTML')
-    # print(props)
 
-    # with open('props.json','w') as file:
-        # file.write(props)
-
-        
+    # keep clicking on load more as long as button keeps appearing
     while load_more:
         try:
             props_script_element = driver.find_element_by_id('__NEXT_DATA__')
@@ -82,6 +71,7 @@ with chrome_driver as driver:
         load_more.click()
         
         try:
+            # wait for load more button to appear
             wait.until(presence_of_element_located((By.XPATH,'//*[@id="page-content"]/div[4]//div/button/span[text()="Load More"]')))
             time.sleep(random.randint(6,12))
             load_more = driver.find_element_by_xpath('//*[@id="page-content"]/div[4]//div/button')
